@@ -7,7 +7,7 @@ provider "aws" {
 resource "aws_vpc" "default" {
   cidr_block = "10.0.0.0/16"
   tags {
-    Name        = "test"
+    Name        = "prod_vpc"
   }
 }
 
@@ -32,7 +32,7 @@ resource "aws_subnet" "default" {
 
 # A security group for the ELB so it is accessible via the web
 resource "aws_security_group" "elb" {
-  name        = "test_elb"
+  name        = "main_elb"
   description = "Used in the terraform"
   vpc_id      = "${aws_vpc.default.id}"
 
@@ -68,7 +68,7 @@ resource "aws_security_group" "elb" {
 }
 
 resource "aws_elb" "web" {
-  name = "test-elb"
+  name = "main-elb"
 
   subnets         = ["${aws_subnet.default.id}"]
   security_groups = ["${aws_security_group.elb.id}"]

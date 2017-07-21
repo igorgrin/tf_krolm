@@ -5,7 +5,7 @@ variable "public_key_path" {
 
 variable "key_name" {
   description = "aws ssh key"
-  default     = "aws_ssh"
+  default     = "aws_key"
 }
 
 variable "aws_region" {
@@ -13,9 +13,9 @@ variable "aws_region" {
   default     = "us-west-2"
 }
 
-# Ubuntu Trusty 14.04 LTS (x64)
+# AMI
 variable "aws_amis" {
   default = {
-    us-west-2 = "ami-9abea4fb"
+    us-west-2 = "ami-6df1e514"
   }
 }

@@ -4,7 +4,7 @@ resource "aws_instance" "web" {
   # communicate with the resource (instance)
   connection {
     # The default username for our AMI
-    user = "ubuntu"
+    user = "ec2-user"
 
     # The connection will use the local SSH agent for authentication.
   }
@@ -19,12 +19,23 @@ resource "aws_instance" "web" {
   key_name = "${aws_key_pair.auth.id}"
 
   # Our Security group to allow HTTP and SSH access
-  vpc_security_group_ids = ["${aws_security_group.default.id}"]
+  vpc_security_group_ids = ["${aws_security_group.ping.id}","${aws_security_group.ssh.id}","${aws_security_group.http.id}"]
 
   # We're going to launch into the same subnet as our ELB. In a production
   # environment it's more common to have a separate private subnet for
   # backend instances.
   subnet_id = "${aws_subnet.default.id}"
+
+  # We run a remote provisioner on the instance after creating it.
+  # Fix the hostname
+  provisioner "remote-exec" {
+    inline = [
+      "sudo yum -y update",
+      "sudo hostname ${aws_instance.web.tags.Name} && echo ${aws_instance.web.tags.Name} |sudo tee /etc/hostname",
+      "sudo echo 127.0.0.1 ${aws_instance.web.tags.Name}.krolm.com ${aws_instance.web.tags.Name} |sudo tee -a /etc/hosts",
+      "sudo echo ${aws_instance.web.private_ip} ${aws_instance.web.tags.Name}.krolm.com ${aws_instance.web.tags.Name} |sudo tee -a /etc/hosts"
+    ]
+  }
 
   # Name tag
   tags {
