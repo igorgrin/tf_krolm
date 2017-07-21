@@ -19,3 +19,9 @@ variable "aws_amis" {
     us-west-2 = "ami-6df1e514"
   }
 }
+
+variable "eip" {
+  default = {
+    admin = "eipalloc-27e2011a"               #35.160.30.102
+  }
+}
