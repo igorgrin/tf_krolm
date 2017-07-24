@@ -31,8 +31,8 @@ resource "aws_eip_association" "admin_ip" {
 }
 
 resource "aws_route53_record" "admin" {
-   zone_id = "${aws_route53_zone.main.zone_id}"
-   name = "admin.krolm.com"
+   zone_id = "${aws_route53_zone.dev.zone_id}"
+   name = "admin.dev.krolm.com"
    type = "A"
    ttl = "300"
    records = ["${aws_instance.admin.private_ip}"]

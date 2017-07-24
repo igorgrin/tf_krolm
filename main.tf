@@ -6,6 +6,8 @@ provider "aws" {
 # Create a VPC to launch our instances into
 resource "aws_vpc" "default" {
   cidr_block = "10.0.0.0/16"
+  enable_dns_hostnames = true
+  enable_dns_support = true
   tags {
     Name        = "prod_vpc"
   }
@@ -52,4 +54,27 @@ resource "aws_key_pair" "auth" {
 
 resource "aws_route53_zone" "main" {
    name = "krolm.com"
+}
+
+resource "aws_route53_zone" "dev" {
+  name = "dev.krolm.com"
+  vpc_id                  = "${aws_vpc.default.id}"
+
+  tags {
+    Environment = "dev"
+  }
+}
+
+resource "aws_route53_record" "dev-ns" {
+  zone_id = "${aws_route53_zone.main.zone_id}"
+  name    = "dev.krolm.com"
+  type    = "NS"
+  ttl     = "30"
+
+  records = [
+    "${aws_route53_zone.dev.name_servers.0}",
+    "${aws_route53_zone.dev.name_servers.1}",
+    "${aws_route53_zone.dev.name_servers.2}",
+    "${aws_route53_zone.dev.name_servers.3}",
+  ]
 }
