@@ -17,4 +17,5 @@ resource "aws_db_instance" "db1" {
   username             = "kradmin"
   password             = "blahblah"
   db_subnet_group_name = "krdb_group"
+  vpc_security_group_ids = ["${aws_security_group.db.id}"]
 }
