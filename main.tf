@@ -32,6 +32,13 @@ resource "aws_subnet" "default" {
   map_public_ip_on_launch = true
 }
 
+resource "aws_subnet" "b" {
+  vpc_id                  = "${aws_vpc.default.id}"
+  cidr_block              = "10.0.2.0/24"
+  map_public_ip_on_launch = false
+  availability_zone       = "us-west-2b"
+}
+
 resource "aws_elb" "web" {
   name = "main-elb"
 
