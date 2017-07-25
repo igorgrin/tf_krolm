@@ -7,7 +7,7 @@ resource "aws_db_subnet_group" "krdb_group" {
   }
 }
 
-resource "aws_db_instance" "db1" {
+resource "aws_db_instance" "krdb1" {
   allocated_storage    = 5
   storage_type         = "gp2"
   engine               = "mysql"
@@ -18,4 +18,13 @@ resource "aws_db_instance" "db1" {
   password             = "blahblah"
   db_subnet_group_name = "krdb_group"
   vpc_security_group_ids = ["${aws_security_group.db.id}"]
+}
+
+# DNS record
+resource "aws_route53_record" "krdb1" {
+   zone_id = "${aws_route53_zone.dev.zone_id}"
+   name = "krdb1.dev.krolm.com"
+   type = "CNAME"
+   ttl = "300"
+   records = ["${aws_db_instance.krdb1.address}"]
 }
