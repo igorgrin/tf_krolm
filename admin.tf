@@ -30,10 +30,18 @@ resource "aws_eip_association" "admin_ip" {
   allocation_id = "${var.eip["admin"]}"
 }
 
-resource "aws_route53_record" "admin" {
+resource "aws_route53_record" "admin_private" {
    zone_id = "${aws_route53_zone.dev.zone_id}"
    name = "admin.dev.krolm.com"
    type = "A"
    ttl = "300"
    records = ["${aws_instance.admin.private_ip}"]
+}
+
+resource "aws_route53_record" "admin_public" {
+   zone_id = "${aws_route53_zone.main.zone_id}"
+   name = "admin.krolm.com"
+   type = "A"
+   ttl = "300"
+   records = ["${aws_instance.admin.public_ip}"]
 }
