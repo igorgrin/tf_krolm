@@ -39,13 +39,14 @@ resource "aws_subnet" "b" {
   availability_zone       = "us-west-2b"
 }
 
-resource "aws_elb" "web" {
+resource "aws_elb" "www" {
   name = "main-elb"
-
   subnets         = ["${aws_subnet.default.id}"]
-  security_groups = ["${aws_security_group.http.id}"]
+  security_groups = [
+                      "${aws_security_group.ping.id}",
+                      "${aws_security_group.http.id}"
+                    ]
   instances       = ["${aws_instance.web.id}"]
-
   listener {
     instance_port     = 80
     instance_protocol = "http"
@@ -57,31 +58,4 @@ resource "aws_elb" "web" {
 resource "aws_key_pair" "auth" {
   key_name   = "${var.key_name}"
   public_key = "${file(var.public_key_path)}"
-}
-
-resource "aws_route53_zone" "main" {
-   name = "krolm.com"
-}
-
-resource "aws_route53_zone" "dev" {
-  name = "dev.krolm.com"
-  vpc_id                  = "${aws_vpc.default.id}"
-
-  tags {
-    Environment = "dev"
-  }
-}
-
-resource "aws_route53_record" "dev-ns" {
-  zone_id = "${aws_route53_zone.main.zone_id}"
-  name    = "dev.krolm.com"
-  type    = "NS"
-  ttl     = "30"
-
-  records = [
-    "${aws_route53_zone.dev.name_servers.0}",
-    "${aws_route53_zone.dev.name_servers.1}",
-    "${aws_route53_zone.dev.name_servers.2}",
-    "${aws_route53_zone.dev.name_servers.3}",
-  ]
 }
