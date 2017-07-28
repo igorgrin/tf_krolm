@@ -25,3 +25,8 @@ variable "eip" {
     admin = "eipalloc-27e2011a"               #35.160.30.102
   }
 }
+
+variable "bucket_name" {
+  default = "kr-state"
+  description = "terraform remote state files"
+}

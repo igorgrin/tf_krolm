@@ -59,3 +59,23 @@ resource "aws_key_pair" "auth" {
   key_name   = "${var.key_name}"
   public_key = "${file(var.public_key_path)}"
 }
+
+# Remote state file
+resource "aws_s3_bucket" "kr_state" {
+  bucket = "${var.bucket_name}"
+  versioning {
+    enabled = true
+  }
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+terraform {
+  required_version = ">= 0.9"
+  backend "s3" {
+    bucket = "kr-state"
+    key    = "main/terraform.state"
+    region = "us-west-2"
+  }
+}
