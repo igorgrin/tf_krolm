@@ -1,5 +1,6 @@
 # tf_krolm
-Run ```
+Run
+```
 terraform init
 ```
- to use remote state file
+to use remote state file
