@@ -55,8 +55,8 @@ resource "aws_route53_record" "apex" {
    name = "krolm.com"
    type = "A"
    alias {
-     name = "${aws_elb.www.dns_name}"
-     zone_id = "${aws_elb.www.zone_id}"
-     evaluate_target_health = true
+     name = "www.krolm.com"
+     zone_id = "${aws_route53_zone.main.zone_id}"
+     evaluate_target_health = false
    }
 }
