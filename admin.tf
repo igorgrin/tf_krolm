@@ -7,7 +7,7 @@ resource "aws_instance" "admin" {
   instance_type = "t2.micro"
   ami = "${lookup(var.aws_amis, var.aws_region)}"
   key_name = "${aws_key_pair.auth.id}"
-  vpc_security_group_ids = ["${aws_security_group.ping.id}","${aws_security_group.ssh.id}"]
+  vpc_security_group_ids = ["${aws_security_group.ping.id}","${aws_security_group.ssh.id}","${aws_security_group.http.id}","${aws_security_group.vpn.id}"]
   subnet_id = "${aws_subnet.default.id}"
 
   # Fix the hostname

@@ -72,6 +72,29 @@ resource "aws_security_group" "ssh" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_security_group" "vpn" {
+  name        = "vpn_access"
+  description = "VPN"
+  vpc_id      = "${aws_vpc.default.id}"
+
+  # VPN access only from anywhere
+  ingress {
+    from_port   = 1194
+    to_port     = 1194
+    protocol    = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_security_group" "db" {
   name        = "db_access"
   description = "MySQL"
