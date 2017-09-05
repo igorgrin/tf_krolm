@@ -39,6 +39,37 @@ resource "aws_route53_record" "dev-ns" {
   ]
 }
 
+# Domain verification records
+resource "aws_route53_record" "amazon_txt" {
+   zone_id = "${aws_route53_zone.main.zone_id}"
+   name = "_amazonses.krolm.com"
+   type = "TXT"
+   records = ["IPf4egIJjT+72xlN1yEQnLjjKJPWLgzyp8qyep1fKvk="]
+   ttl = "300"
+}
+resource "aws_route53_record" "amazon_dkim1" {
+   zone_id = "${aws_route53_zone.main.zone_id}"
+   name = "4j23ex5wwtusfqwtxxrywnouo7q4qtdg._domainkey.krolm.com"
+   type = "CNAME"
+   records = ["4j23ex5wwtusfqwtxxrywnouo7q4qtdg.dkim.amazonses.com"]
+   ttl = "300"
+}
+resource "aws_route53_record" "amazon_dkim2" {
+   zone_id = "${aws_route53_zone.main.zone_id}"
+   name = "iuocwsrwts2jcdcisaaiwvy4gizluze7._domainkey.krolm.com"
+   type = "CNAME"
+   records = ["iuocwsrwts2jcdcisaaiwvy4gizluze7.dkim.amazonses.com"]
+   ttl = "300"
+}
+resource "aws_route53_record" "amazon_dkim3" {
+   zone_id = "${aws_route53_zone.main.zone_id}"
+   name = "zavoc2fttyb6ab4qk4dngv2woxjxk5l4._domainkey.krolm.com"
+   type = "CNAME"
+   records = ["zavoc2fttyb6ab4qk4dngv2woxjxk5l4.dkim.amazonses.com"]
+   ttl = "300"
+}
+
+# Public www records
 resource "aws_route53_record" "www_public" {
    zone_id = "${aws_route53_zone.main.zone_id}"
    name = "www.krolm.com"
